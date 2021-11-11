@@ -1,0 +1,31 @@
+*{
+    outline:none;
+}
+#input{
+    width:90%;
+    height:30px;
+    position:fixed;
+    bottom:0px;left:0px;
+    border:2px solid silver;
+}
+
+.btn{
+    width:10%;
+    height:36px;
+    position:fixed;
+    bottom:0px;right:0px;
+    color:white;
+    background:linear-gradient(0deg,rgb(0, 89, 255),cyan);
+    border:2px solid silver;
+    transition:linear 0.1s;
+}
+
+.btn:active{
+    background:linear-gradient(0deg,cyan,rgb(0, 89, 255));
+}
+
+@media (orientation:portrait){
+.btn{
+    width:50px;
+}
+}
