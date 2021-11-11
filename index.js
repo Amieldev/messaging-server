@@ -21,7 +21,6 @@ app.get('/send/',(req,res)=>{
 
     res.json(JSON.stringify({message:fs.readFileSync('database.json','utf-8')}));
 
-    console.log("ok")
 
 });
 
