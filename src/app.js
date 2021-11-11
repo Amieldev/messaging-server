@@ -28,4 +28,16 @@ function SendMessage(){
     text.value="";
 }
 
+    fetch('/send/')
+    .then(response => response.json())
+    .then(data => renderMessages(data));
+
+  function renderMessages(data){
+    JSON.parse(data).forEach(msg=> {
+        const message=document.createElement("button");
+        message.innerHTML=msg;
+        message.classList.add('message')
+        document.body.appendChild(message);
+    });
+  }
 

@@ -29,3 +29,17 @@
     width:50px;
 }
 }
+
+.message{
+    display:flex;
+    margin:10px;
+    min-width:50px;
+    max-width:200px;
+    min-height:30px;
+    align-items:center;
+    color:white;
+    background:linear-gradient(0deg,rgb(0, 89, 255),cyan);
+    border:2px solid silver;
+    border-radius:10px;
+    border-top-left-radius:0px;
+}
