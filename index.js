@@ -1,8 +1,11 @@
 const express=require('express');
 const fs=require('fs');
 const path=require('path');
+const localtunnel=require('localtunnel');
+const open=require('open');
 const app=express();
 const PORT=3000;
+
 
 
 app.use(express.json());
@@ -37,3 +40,18 @@ app.post('/send/',(req,res)=>{
     fs.writeFileSync('database.json',JSON.stringify(database));
     
 });
+
+
+  open('http://localhost:3000');
+
+(async () => {
+    const tunnel = await localtunnel({ port: 3000 , subdomain:"amidev"});
+  
+    console.log(tunnel.url);
+  
+    tunnel.on('close', () => {
+
+      console.log("server closed.")
+
+    });
+  })();
