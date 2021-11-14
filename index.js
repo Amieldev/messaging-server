@@ -1,29 +1,32 @@
 const express=require('express');
 const fs=require('fs');
-const path=require('path');
 const localtunnel=require('localtunnel');
 const open=require('open');
 const app=express();
-const PORT=3000;
+const http=require('http').createServer(app);
+const io=require('socket.io')(http,{
+    cors:{origin:"*"}
+});
 
-
-
+app.use(express.static('src'));
 app.use(express.json());
-app.use(express.static("src"));
 
+io.on('connection',socket=>{
+    console.log(`${socket.id.substr(0,2)} is user connected!`);
 
-app.listen(PORT,()=>{
-    console.log(`Listening on port:${PORT}`);
-});
+    socket.on('message',message=>{
+        console.log(message);
+        io.emit('message',message)
+    })
 
-app.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname+'/index.html'));
-});
+})
+
+http.listen(8000,()=>console.log('Listening on port 8000'));
+
 
 app.get('/send/',(req,res)=>{
 
     res.send(JSON.stringify(fs.readFileSync('database.json','utf-8')));
-
 
 });
 
@@ -42,10 +45,10 @@ app.post('/send/',(req,res)=>{
 });
 
 
-  open('http://localhost:3000');
+  open('http://localhost:8000');
 
 (async () => {
-    const tunnel = await localtunnel({ port: 3000 , subdomain:"amidev"});
+    const tunnel = await localtunnel({ port: 8000 , subdomain:"amidev"});
   
     console.log(tunnel.url);
   
