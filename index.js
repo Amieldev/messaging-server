@@ -15,8 +15,13 @@ io.on('connection',socket=>{
     console.log(`${socket.id.substr(0,2)} is user connected!`);
 
     socket.on('message',message=>{
-        console.log(message);
+        console.log(`${socket.id.substr(0,2)}:${message}`);
         io.emit('message',message)
+    });
+
+    socket.on('delete',message=>{
+        console.log(`${socket.id.substr(0,2)} deleted:${message}`);
+        io.emit('delete',message)
     })
 
 })
@@ -32,7 +37,6 @@ app.get('/send/',(req,res)=>{
 
 app.post('/send/',(req,res)=>{
     const {message}=req.body;
-    console.log(message);
 
     res.send(message)
 
@@ -43,6 +47,18 @@ app.post('/send/',(req,res)=>{
     fs.writeFileSync('database.json',JSON.stringify(database));
     
 });
+
+app.delete('/send/',(req,res)=>{
+    const {deletemessage}=req.body;
+    console.log(`Deleting the message :${deletemessage}`);
+
+    let database=JSON.parse(fs.readFileSync('database.json','utf-8'));
+
+    let newDatabase=database.filter(text=>text!=deletemessage);
+
+    fs.writeFileSync('database.json',JSON.stringify(newDatabase));
+
+})
 
 
   open('http://localhost:8000');

@@ -1,6 +1,7 @@
 const btn=document.querySelector(".btn");
 const text=document.getElementById("input");
-const socket=io('ws://amidev.loca.lt');
+const chat=document.querySelector(".chat");
+const socket=io('ws://localhost:8000');
 
 
 
@@ -13,9 +14,6 @@ const socket=io('ws://amidev.loca.lt');
 
 function SendMessage(){
     if(text.value!==""){
-
-        socket.emit('message',text.value)
-
         fetch('/send/',
         {
             headers:{
@@ -25,7 +23,9 @@ function SendMessage(){
             body:JSON.stringify({
                 message:text.value
             })
-        }).then(res=>console.log(res));
+        });
+
+        socket.emit('message',text.value)
 
     }else{
         alert("No message to send.")
@@ -43,14 +43,46 @@ function SendMessage(){
     JSON.parse(data).forEach(msg=> {
         const message=document.createElement("button");
         message.innerHTML=msg;
-        message.classList.add('message')
-        document.body.appendChild(message);
+        message.classList.add('message');
+        chat.appendChild(message);
+        message.onclick=()=>{DeleteMessage(message.innerHTML)};
     });
+  };
+
+  function DeleteMessage(message){
+
+    fetch('/send/',
+    {
+        headers:{
+            'Content-Type':'application/json'
+        },
+        method:'delete',
+        body:JSON.stringify({
+            deletemessage:message
+        })
+    });
+
+    socket.emit('delete',message);
+
   }
+
+
 
 socket.on('message',text=>{
     const message=document.createElement("button");
     message.innerHTML=text;
     message.classList.add('message')
-    document.body.appendChild(message);
+    chat.appendChild(message);
+    message.onclick=()=>{DeleteMessage(message.innerHTML)};
+});
+
+socket.on('delete',text=>{
+    const messages=Array.from(document.querySelectorAll('.message'));
+    messages.forEach(msg=>{
+        if(msg.innerHTML==text){
+        chat.removeChild(msg);
+        }
+    }) 
+
 })
+
