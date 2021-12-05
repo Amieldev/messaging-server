@@ -3,6 +3,7 @@ const fs=require('fs');
 const localtunnel=require('localtunnel');
 const open=require('open');
 const app=express();
+const PORT=8000;
 const http=require('http').createServer(app);
 const io=require('socket.io')(http,{
     cors:{origin:"*"}
@@ -22,11 +23,16 @@ io.on('connection',socket=>{
     socket.on('delete',message=>{
         console.log(`${socket.id.substr(0,2)} deleted:${message}`);
         io.emit('delete',message)
-    })
+    });
+
+    socket.on('edit',message=>{
+        console.log(`${socket.id.substr(0,2)} edited:${JSON.stringify(message).edit}`);
+        io.emit('edit',message)
+    });
 
 })
 
-http.listen(8000,()=>console.log('Listening on port 8000'));
+http.listen(PORT,()=>console.log(`Listening on port ${PORT}`));
 
 
 app.get('/send/',(req,res)=>{
@@ -58,13 +64,32 @@ app.delete('/send/',(req,res)=>{
 
     fs.writeFileSync('database.json',JSON.stringify(newDatabase));
 
+});
+
+app.put('/send/',(req,res)=>{
+    const {edit}=req.body;
+    const {by}=req.body;
+
+    let database=JSON.parse(fs.readFileSync('database.json','utf-8'));
+
+    res.send(`Editing ${edit}`);
+
+    database.forEach(message => {
+        if(message==edit){
+            database[database.indexOf(message)]=by;
+        }
+    });
+
+
+    fs.writeFileSync('database.json',JSON.stringify(database));
+
 })
 
 
-  open('http://localhost:8000');
+  open(`http://localhost:${PORT}`);
 
 (async () => {
-    const tunnel = await localtunnel({ port: 8000 , subdomain:"amidev"});
+    const tunnel = await localtunnel({ port: PORT , subdomain:"amidev"});
   
     console.log(tunnel.url);
   
