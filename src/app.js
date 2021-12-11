@@ -88,7 +88,7 @@ function SendMessage(){
 
   function EditMessage(message){
 
-    const editBy=window.prompt("Enter message:");
+    const editBy=window.prompt("Enter message:",message);
 
     fetch('/send/',
     {

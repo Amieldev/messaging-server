@@ -26,7 +26,7 @@ io.on('connection',socket=>{
     });
 
     socket.on('edit',message=>{
-        console.log(`${socket.id.substr(0,2)} edited:${JSON.stringify(message).edit}`);
+        console.log(`${socket.id.substr(0,2)} edited:${JSON.parse(message).edit} by:${JSON.parse(message).by}`);
         io.emit('edit',message)
     });
 
