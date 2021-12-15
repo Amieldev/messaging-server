@@ -1,4 +1,4 @@
-const socket=io('ws://amidev.loca.lt');
+const socket=io('ws://192.168.1.7:8000');
 
 const btn=document.querySelector(".btn");
 const text=document.getElementById("input");
@@ -88,7 +88,8 @@ function SendMessage(){
 
   function EditMessage(message){
 
-    const editBy=window.prompt("Enter message:",message);
+    let editBy=window.prompt("Enter message:",message);
+    if(editBy==null){editBy=message}
 
     fetch('/send/',
     {
