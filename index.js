@@ -88,14 +88,14 @@ app.put('/send/',(req,res)=>{
 
   open(`http://localhost:${PORT}`);
 
-// (async () => {
-//     const tunnel = await localtunnel({ port: PORT , subdomain:"amidev"});
+(async () => {
+    const tunnel = await localtunnel({ port: PORT , subdomain:"amidev"});
   
-//     console.log(tunnel.url);
+    console.log(tunnel.url);
   
-//     tunnel.on('close', () => {
+    tunnel.on('close', () => {
 
-//       console.log("server closed.")
+      console.log("server closed.")
 
-//     });
-//   })();
+    });
+  })();
