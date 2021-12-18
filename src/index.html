@@ -15,6 +15,11 @@
     <input type="text" id="input" placeholder="Enter message :"/>
     <button class="btn"><i class="material-icons">send</i></button>
 
+    <form method="post" action="/file" enctype="multipart/form-data">
+        <input type="file" name="file" style="visibility: hidden;"/>
+        <button type="submit" class="upload-btn"><i class="material-icons">folder</i></button>
+    </form>
+
     <div class="menu">
         <button class="delete-btn"><i class="material-icons">delete</i></button>
         <button class="edit-btn"><i class="material-icons">edit</i></button>

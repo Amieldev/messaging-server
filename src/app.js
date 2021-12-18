@@ -1,4 +1,4 @@
-const socket=io('ws://amidev.loca.lt');
+const socket=io('ws://192.168.43.243:8000');
 
 const btn=document.querySelector(".btn");
 const text=document.getElementById("input");
@@ -19,7 +19,7 @@ document.body.onkeypress=(e)=>{
 
 function SendMessage(){
     if(text.value!==""){
-        fetch('/message/',
+        fetch('/message',
         {
             headers:{
                 'Content-Type':'application/json'
@@ -38,7 +38,7 @@ function SendMessage(){
     text.value="";
 }
 
-    fetch('/message/')
+    fetch('/message')
     .then(response => response.json())
     .then(data => renderMessages(data));
 
@@ -64,7 +64,7 @@ function SendMessage(){
   }
 
   function DeleteMessage(message){
-    fetch('/message/',
+    fetch('/message',
     {
         headers:{
             'Content-Type':'application/json'
@@ -84,7 +84,7 @@ function SendMessage(){
     let editBy=window.prompt("Enter message:",message);
     if(editBy==null){editBy=message}
 
-    fetch('/message/',
+    fetch('/message',
     {
         headers:{
             'Content-Type':'application/json'

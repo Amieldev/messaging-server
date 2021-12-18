@@ -1,4 +1,5 @@
 const express=require('express');
+const upload=require('express-fileupload');
 const fs=require('fs');
 const localtunnel=require('localtunnel');
 const open=require('open');
@@ -11,6 +12,7 @@ const io=require('socket.io')(http,{
 
 app.use(express.static('src'));
 app.use(express.json());
+app.use(upload());
 
 io.on('connection',socket=>{
     console.log(`${socket.id.substr(0,2)} is user connected!`);
@@ -34,12 +36,11 @@ io.on('connection',socket=>{
 
 http.listen(PORT,()=>console.log(`Listening on port ${PORT}`));
 
-
-app.get('/message/',(req,res)=>{
+app.get('/message',(req,res)=>{
     res.send(JSON.stringify(fs.readFileSync('database.json','utf-8')));
 });
 
-app.post('/message/',(req,res)=>{
+app.post('/message',(req,res)=>{
     const {message}=req.body;
     res.send(message)
     let database=JSON.parse(fs.readFileSync('database.json','utf-8'));
@@ -47,7 +48,22 @@ app.post('/message/',(req,res)=>{
     fs.writeFileSync('database.json',JSON.stringify(database));
 });
 
-app.delete('/message/',(req,res)=>{
+app.post('/file',(req,res)=>{
+    if(req.files){
+        let file=req.files.file;
+        let filename=file.name;
+        console.log(`uploaded:${filename}`);
+        file.mv('./uploads/'+filename,(err)=>{
+            if(err){
+                res.send(err);
+            }else{
+                res.send('File uploaded');
+            }
+        })
+    }
+});
+
+app.delete('/message',(req,res)=>{
     const {deletemessage}=req.body;
     console.log(`Deleting the message :${deletemessage}`);
     let database=JSON.parse(fs.readFileSync('database.json','utf-8'));
@@ -55,7 +71,7 @@ app.delete('/message/',(req,res)=>{
     fs.writeFileSync('database.json',JSON.stringify(newDatabase));
 });
 
-app.put('/message/',(req,res)=>{
+app.put('/message',(req,res)=>{
     const {edit}=req.body;
     const {by}=req.body;
     let database=JSON.parse(fs.readFileSync('database.json','utf-8'));
@@ -66,15 +82,15 @@ app.put('/message/',(req,res)=>{
         }
     });
     fs.writeFileSync('database.json',JSON.stringify(database));
-})
+});
 
 
-  open(`http://localhost:${PORT}`);
+//   open(`http://localhost:${PORT}`);
 
-(async () => {
-    const tunnel = await localtunnel({ port: PORT , subdomain:"amidev"});
-    console.log(tunnel.url);
-    tunnel.on('close', () => {
-      console.log("server closed.")
-    });
-  })();
+// (async () => {
+//     const tunnel = await localtunnel({ port: PORT , subdomain:"amidev"});
+//     console.log(tunnel.url);
+//     tunnel.on('close', () => {
+//       console.log("server closed.")
+//     });
+//   })();
