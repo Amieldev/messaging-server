@@ -35,54 +35,37 @@ io.on('connection',socket=>{
 http.listen(PORT,()=>console.log(`Listening on port ${PORT}`));
 
 
-app.get('/send/',(req,res)=>{
-
+app.get('/message/',(req,res)=>{
     res.send(JSON.stringify(fs.readFileSync('database.json','utf-8')));
-
 });
 
-app.post('/send/',(req,res)=>{
+app.post('/message/',(req,res)=>{
     const {message}=req.body;
-
     res.send(message)
-
     let database=JSON.parse(fs.readFileSync('database.json','utf-8'));
-
     database.push(message);
-
     fs.writeFileSync('database.json',JSON.stringify(database));
-    
 });
 
-app.delete('/send/',(req,res)=>{
+app.delete('/message/',(req,res)=>{
     const {deletemessage}=req.body;
     console.log(`Deleting the message :${deletemessage}`);
-
     let database=JSON.parse(fs.readFileSync('database.json','utf-8'));
-
     let newDatabase=database.filter(text=>text!=deletemessage);
-
     fs.writeFileSync('database.json',JSON.stringify(newDatabase));
-
 });
 
-app.put('/send/',(req,res)=>{
+app.put('/message/',(req,res)=>{
     const {edit}=req.body;
     const {by}=req.body;
-
     let database=JSON.parse(fs.readFileSync('database.json','utf-8'));
-
     res.send(`Editing ${edit}`);
-
     database.forEach(message => {
         if(message==edit){
             database[database.indexOf(message)]=by;
         }
     });
-
-
     fs.writeFileSync('database.json',JSON.stringify(database));
-
 })
 
 
@@ -90,12 +73,8 @@ app.put('/send/',(req,res)=>{
 
 (async () => {
     const tunnel = await localtunnel({ port: PORT , subdomain:"amidev"});
-  
     console.log(tunnel.url);
-  
     tunnel.on('close', () => {
-
       console.log("server closed.")
-
     });
   })();

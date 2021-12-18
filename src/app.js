@@ -1,4 +1,4 @@
-const socket=io('ws://192.168.1.7:8000');
+const socket=io('ws://amidev.loca.lt');
 
 const btn=document.querySelector(".btn");
 const text=document.getElementById("input");
@@ -19,7 +19,7 @@ document.body.onkeypress=(e)=>{
 
 function SendMessage(){
     if(text.value!==""){
-        fetch('/send/',
+        fetch('/message/',
         {
             headers:{
                 'Content-Type':'application/json'
@@ -35,11 +35,10 @@ function SendMessage(){
     }else{
         alert("No message to send.")
     }
-
     text.value="";
 }
 
-    fetch('/send/')
+    fetch('/message/')
     .then(response => response.json())
     .then(data => renderMessages(data));
 
@@ -56,20 +55,16 @@ function SendMessage(){
 
   function showMenu(message){
       menu.classList.add('menu-active');
-
       deleteBtn.onclick=()=>{DeleteMessage(message)};
-
       editBtn.onclick=()=>{EditMessage(message)};
-
       closeBtn.onclick=()=>{
         menu.classList.remove('menu-active');
+        message="";
     }
-
   }
 
   function DeleteMessage(message){
-
-    fetch('/send/',
+    fetch('/message/',
     {
         headers:{
             'Content-Type':'application/json'
@@ -81,9 +76,7 @@ function SendMessage(){
     });
 
     socket.emit('delete',message);
-
     menu.classList.remove('menu-active');
-
   }
 
   function EditMessage(message){
@@ -91,7 +84,7 @@ function SendMessage(){
     let editBy=window.prompt("Enter message:",message);
     if(editBy==null){editBy=message}
 
-    fetch('/send/',
+    fetch('/message/',
     {
         headers:{
             'Content-Type':'application/json'
@@ -106,7 +99,6 @@ function SendMessage(){
     socket.emit('edit',JSON.stringify({edit:message,by:editBy}));
 
     menu.classList.remove('menu-active');
-
   }
 
 
@@ -136,5 +128,4 @@ socket.on('edit',editmsg=>{
             msg.innerHTML=JSON.parse(editmsg).by;
         }
     }) 
-
 });
