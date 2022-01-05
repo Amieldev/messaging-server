@@ -66,7 +66,10 @@
     cursor:pointer;
 }
 
-.upload-btn{
+input[type="file"] {
+    display: none;
+}
+.choose-file{
     width:50px;
     height:50px;
     border:2px solid silver;
@@ -76,4 +79,7 @@
     position:fixed;
     bottom:55px;
     right:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 }

@@ -1,5 +1,4 @@
-const socket=io('ws://192.168.43.243:8000');
-
+const socket=io('ws://amidev.loca.lt');
 const btn=document.querySelector(".btn");
 const text=document.getElementById("input");
 const chat=document.querySelector(".chat");

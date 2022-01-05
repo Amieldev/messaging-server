@@ -1,10 +1,11 @@
 const express=require('express');
 const upload=require('express-fileupload');
 const fs=require('fs');
+const path=require('path');
 const localtunnel=require('localtunnel');
 const open=require('open');
 const app=express();
-const PORT=8000;
+const PORT=9000;
 const http=require('http').createServer(app);
 const io=require('socket.io')(http,{
     cors:{origin:"*"}
@@ -38,6 +39,12 @@ http.listen(PORT,()=>console.log(`Listening on port ${PORT}`));
 
 app.get('/message',(req,res)=>{
     res.send(JSON.stringify(fs.readFileSync('database.json','utf-8')));
+});
+
+app.get('/download',(req,res)=>{
+    let filePath = path.join(__dirname, "database.json");
+
+    res.download(filePath);
 });
 
 app.post('/message',(req,res)=>{
@@ -85,12 +92,12 @@ app.put('/message',(req,res)=>{
 });
 
 
-//   open(`http://localhost:${PORT}`);
+  open(`http://localhost:${PORT}`);
 
-// (async () => {
-//     const tunnel = await localtunnel({ port: PORT , subdomain:"amidev"});
-//     console.log(tunnel.url);
-//     tunnel.on('close', () => {
-//       console.log("server closed.")
-//     });
-//   })();
+(async () => {
+    const tunnel = await localtunnel({ port: PORT , subdomain:"amidev"});
+    console.log(tunnel.url);
+    tunnel.on('close', () => {
+      console.log("server closed.")
+    });
+  })();
